@@ -1,0 +1,21 @@
+{
+	"hostname" : "name",
+	"drives" : [
+		"drive1" : {
+			"name" : "name",
+			"total_space" : "size",
+			"used_space" : "size"
+		},
+		"drive2" : {
+			"name" : "name",
+			"total_space" : "size",
+			"used_space" : "size"
+		}
+	],
+	"cpu_count" : "cpu_count",
+	"cpu_usage" : "cpu",
+	"memory_total" : "size",
+	"memory_free" : "size",
+	"network_up" : "transfer_rate",
+	"network_down" : "transfer_rate"
+}
