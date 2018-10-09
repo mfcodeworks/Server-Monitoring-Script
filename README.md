@@ -1,1 +1,76 @@
-Server-Monitoring-Script
+# Server Monitoring Script
+
+## Purpose
+
+The Python script is designed to be run as a cronjob on every boot to run in the background.
+The script will gather information on:
+
+- CPU
+- Memory
+- Network
+- Hard Drives
+- System OS
+
+The script will produce a JSON output at 5 second intervals for use with any software or server accepting a JSON input.
+Example:
+
+```json
+{
+    "hostname": "HOME-LAPTOP1",
+    "system": {
+        "name": "Windows",
+        "version": "10"
+    },
+    "cpu_count": 4,
+    "cpu_usage": 17.9,
+    "memory_total": 8440942592,
+    "memory_used": 6244225024,
+    "memory_used_percent": 74.0,
+    "drives": [
+        {
+            "name": "C:\\",
+            "mount_point": "C:\\",
+            "type": "NTFS",
+            "total_size": 536224985088,
+            "used_size": 167306108928,
+            "percent_used": 31.2
+        },
+        {
+            "name": "D:\\",
+            "mount_point": "D:\\",
+            "type": "NTFS",
+            "total_size": 463332921344,
+            "used_size": 49498419200,
+            "percent_used": 10.7
+        }
+    ],
+    "network_up": 54,
+    "network_down": 4150
+}
+```
+
+The script includes a function to POST JSON to a remote server. 
+
+This script can be installed on several machines that report to a central monitoring server.
+
+## Usage
+
+Clone the script with `git clone`.
+
+Install Python.
+
+Create a cron job to run the script on every boot.
+
+To test the script output run with `python monitor.py` or to run in background use `pythonw monitor.py`.
+
+### Creating Cron Job
+
+Edit cron with `crontab -e`.
+
+Add the script at the bottom of the cron list as `@reboot /path/to/script/monitor.py`.
+
+## Author
+
+MF Softworks <mf@nygmarosebeauty.com>
+
+mf.nygmarosebeauty.com
