@@ -109,6 +109,7 @@ def post_data(data):
         print("Content:\n", response.json())
     except requests.exceptions.RequestException as e:
         print("\nGET Error:\n",e)
+        exit(0)
 
 while True:
     main()
