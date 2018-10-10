@@ -3,13 +3,14 @@
 ## Purpose
 
 The Python script is designed to be run as a cronjob on every boot to run in the background.
-The script will gather information on:
+The script will gather information:
 
 - CPU
 - Memory
 - Network
 - Hard Drives
 - System OS
+- Current UTC Timestamp
 
 The script will produce a JSON output at 5 second intervals for use with any software or server accepting a JSON input.
 Example:
@@ -45,11 +46,12 @@ Example:
         }
     ],
     "network_up": 54,
-    "network_down": 4150
+    "network_down": 4150,
+    "timestamp" : "2018-10-10 01:41:21"
 }
 ```
 
-The script includes a function to POST JSON to a remote server. 
+The script includes a function to send JSON to a remote server.
 
 This script can be installed on several machines that report to a central monitoring server.
 
@@ -58,6 +60,8 @@ This script can be installed on several machines that report to a central monito
 Clone the script with `git clone`.
 
 Install Python.
+
+If any library is missing do `pip install` *library*.
 
 Create a cron job to run the script on every boot.
 

@@ -1,4 +1,4 @@
-import socket, psutil, requests, time, json, platform
+import socket, time, json, datetime, platform, psutil, requests
 
 def main():
     # Hostname Info
@@ -49,10 +49,12 @@ def main():
         "version" : platform.release()
     }
     print(system["name"],system["version"])
-    
+
+    # Time Info
+    timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     ## Set Machine Info
-    machine_info = {
+    machine = {
     	"hostname" : hostname,
         "system" : system,
     	"cpu_count" : cpu_count,
@@ -62,10 +64,14 @@ def main():
     	"memory_used_percent" : memory_used_percent,
     	"drives" : disks,
     	"network_up" : network_stats["traffic_out"],
-    	"network_down" : network_stats["traffic_in"]
+    	"network_down" : network_stats["traffic_in"],
+        "timestamp" : timestamp
     }
 
-    data = json.dumps(machine_info)
+    data = json.dumps(machine)
+    print("\nData:")
+    print(data)
+
     post_data(data)
 
 def get_bandwidth():
@@ -94,15 +100,17 @@ def get_bandwidth():
     return network
 
 def post_data(data):
-    ## POST data
     try:
-        endpoint = "https://your-monitoring-server.com"
-        r = requests.post(url = endpoint, data = data)
-        print(r)
+        endpoint = "http://monitor.localhost.local/api/"
+        response = requests.get(url = endpoint, params = {"data" : data})
+        print("\nGET:")
+        print("Response:", response.status_code)
+        print("Headers:", response.headers)
+        print("Content:\n", response.json())
     except requests.exceptions.RequestException as e:
-        print("\nPOST Error:\n",e)
+        print("\nGET Error:\n",e)
 
 while True:
     main()
     print("-----------------------------------------------------------------")
-    time.sleep(5)
+    time.sleep(3)
