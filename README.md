@@ -1,5 +1,8 @@
 # Server Monitoring Script
 
+[![GitHub license](https://img.shields.io/github/license/mfappsandweb/Server-Monitoring-Script.svg)](https://github.com/mfappsandweb/Server-Monitoring-Script/blob/master/LICENSE.md) [![Build Status](https://travis-ci.com/mfappsandweb/Server-Monitoring-Script.svg?branch=master)](https://travis-ci.com/mfappsandweb/Server-Monitoring-Script)
+[![Code Coverage](https://codecov.io/gh/mfappsandweb/Server-Monitoring-Script/branch/master/graphs/badge.svg)](https://codecov.io/gh/mfappsandweb/Server-Monitoring-Script) ![GitHub Size](https://img.shields.io/github/repo-size/mfappsandweb/Server-Monitoring-Script.svg)
+
 ## Purpose
 
 The Python script is designed to be run as a cronjob on every boot to run in the background.
