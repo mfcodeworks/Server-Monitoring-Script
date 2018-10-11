@@ -72,7 +72,7 @@ def main():
     print("\nData:")
     print(data)
 
-    post_data(data)
+    send_data(data)
 
 def get_bandwidth():
     # Get net in/out
@@ -99,14 +99,18 @@ def get_bandwidth():
     network = {"traffic_in" : current_in, "traffic_out" : current_out}
     return network
 
-def post_data(data):
+def send_data(data):
     try:
         endpoint = "http://monitor.localhost.local/api/"
         response = requests.get(url = endpoint, params = {"data" : data})
         print("\nGET:")
         print("Response:", response.status_code)
         print("Headers:", response.headers)
-        print("Content:\n", response.json())
+        print("Content:", response.content)
+        try:
+            print("JSON Content:\n", response.json())
+        except:
+            print("No JSON content")
     except requests.exceptions.RequestException as e:
         print("\nGET Error:\n",e)
         exit(0)
