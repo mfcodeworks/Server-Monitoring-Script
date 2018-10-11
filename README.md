@@ -66,15 +66,27 @@ Install Python.
 
 If any library is missing do `pip install` *library*.
 
+To test the script output run with `python3 monitor.py`.
+
+### Linux Autostart
+
 Create a cron job to run the script on every boot.
-
-To test the script output run with `python3 monitor.py` or to run in background use `pythonw monitor.py` for PC and `python3 monitor.py &` for Linux.
-
-### Creating Cron Job
 
 Edit cron with `crontab -e`.
 
 Add the script at the bottom of the cron list as `@reboot python3 /path/to/script/monitor.py &`.
+
+### Windows Autostart
+
+`Windows/monitor.bat` and `Windows/monitor.vbs` scripts are included.
+
+`monitor.bat` will call python to launch `monitor.py`.
+
+`monitor.vbs` silently calls `monitor.bat` to run in the background.
+
+To create an autostart for Windows open the startup folder with keyboard `Windows + R`, enter `shell:startup` and create a shortcut here to `monitor.vbs`. 
+
+This will run the script in the background on every boot.
 
 ## Author
 
