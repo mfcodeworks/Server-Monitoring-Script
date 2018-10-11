@@ -1,4 +1,4 @@
-import socket, time, json, datetime, platform, psutil, requests
+import socket, time, json, datetime, platform, psutil, requests, pprint
 
 def main():
     # Hostname Info
@@ -70,7 +70,7 @@ def main():
 
     data = json.dumps(machine)
     print("\nData:")
-    print(data)
+    pprint.pprint(machine, indent=4)
 
     send_data(data)
 
@@ -105,10 +105,12 @@ def send_data(data):
         response = requests.get(url = endpoint, params = {"data" : data})
         print("\nGET:")
         print("Response:", response.status_code)
-        print("Headers:", response.headers)
+        print("Headers:")
+        pprint.pprint(response.headers)
         print("Content:", response.content)
         try:
-            print("JSON Content:\n", response.json())
+            print("JSON Content:")
+            pprint.pprint(response.json())
         except:
             print("No JSON content")
     except requests.exceptions.RequestException as e:
