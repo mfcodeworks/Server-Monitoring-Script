@@ -68,13 +68,13 @@ If any library is missing do `pip install` *library*.
 
 Create a cron job to run the script on every boot.
 
-To test the script output run with `python monitor.py` or to run in background use `pythonw monitor.py`.
+To test the script output run with `python3 monitor.py` or to run in background use `pythonw monitor.py` for PC and `python3 monitor.py &` for Linux.
 
 ### Creating Cron Job
 
 Edit cron with `crontab -e`.
 
-Add the script at the bottom of the cron list as `@reboot /path/to/script/monitor.py`.
+Add the script at the bottom of the cron list as `@reboot python3 /path/to/script/monitor.py &`.
 
 ## Author
 
