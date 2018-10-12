@@ -25,6 +25,7 @@ Example:
         "name": "Windows",
         "version": "10"
     },
+    "uptime" : 231199,
     "cpu_count": 4,
     "cpu_usage": 17.9,
     "memory_total": 8440942592,

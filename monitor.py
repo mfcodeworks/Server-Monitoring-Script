@@ -52,11 +52,15 @@ def main():
 
     # Time Info
     timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    uptime = int(time.time() - psutil.boot_time())
+    print("System Uptime:")
+    print(uptime)
 
     ## Set Machine Info
     machine = {
     	"hostname" : hostname,
         "system" : system,
+        "uptime" : uptime,
     	"cpu_count" : cpu_count,
     	"cpu_usage" : cpu_usage,
     	"memory_total" : memory_total,
