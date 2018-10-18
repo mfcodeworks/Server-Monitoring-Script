@@ -56,7 +56,7 @@ def main():
     print("System Uptime:")
     print(uptime)
 
-    ## Set Machine Info
+    # Set Machine Info
     machine = {
     	"hostname" : hostname,
         "system" : system,
@@ -104,21 +104,30 @@ def get_bandwidth():
     return network
 
 def send_data(data):
-    try:
-        endpoint = "http://monitor.localhost.local/api/"
-        response = requests.get(url = endpoint, params = {"data" : data})
-        print("\nGET:")
-        print("Response:", response.status_code)
-        print("Headers:")
-        pprint.pprint(response.headers)
-        print("Content:", response.content)
+    # Attempt to send data up to 30 times
+    for attempt in range(30):
         try:
-            print("JSON Content:")
-            pprint.pprint(response.json())
-        except:
-            print("No JSON content")
-    except requests.exceptions.RequestException as e:
-        print("\nGET Error:\n",e)
+            # endpoint = monitoring server
+            endpoint = "http://monitor.localhost.local/api/"
+            response = requests.get(url = endpoint, params = {"data" : data})
+            print("\nGET:")
+            print("Response:", response.status_code)
+            print("Headers:")
+            pprint.pprint(response.headers)
+            print("Content:", response.content)
+            # Attempt printing response in JSON if possible
+            try:
+                print("JSON Content:")
+                pprint.pprint(response.json())
+            except:
+                print("No JSON content")
+            break
+        except requests.exceptions.RequestException as e:
+            print("\nGET Error:\n",e)
+            # Sleep 1 minute before retrying
+            time.sleep(60)
+    else:
+        # If no connection established for half an hour, kill script
         exit(0)
 
 while True:

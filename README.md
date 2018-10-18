@@ -13,7 +13,8 @@ The script will gather information:
 - Network
 - Hard Drives
 - System OS
-- Current UTC Timestamp
+- System Uptime
+- UTC Timestamp
 
 The script will produce a JSON output at 5 second intervals for use with any software or server accepting a JSON input.
 Example:
@@ -65,19 +66,19 @@ Clone the script with `git clone`.
 
 Install Python.
 
-If any library is missing do `pip install` *library*.
+If any library is missing do `pip3 install` *library*.
 
 To test the script output run with `python3 monitor.py`.
 
-### Linux Autostart
+### **Linux Autostart**
 
 Create a cron job to run the script on every boot.
 
 Edit cron with `crontab -e`.
 
-Add the script at the bottom of the cron list as `@reboot python3 /path/to/script/monitor.py &`.
+Add the script at the bottom of the cron list as `@reboot /usr/bin/python3 /path/to/script/monitor.py &`.
 
-### Windows Autostart
+### **Windows Autostart**
 
 `Windows/monitor.bat` and `Windows/monitor.vbs` scripts are included.
 
@@ -85,9 +86,21 @@ Add the script at the bottom of the cron list as `@reboot python3 /path/to/scrip
 
 `monitor.vbs` silently calls `monitor.bat` to run in the background.
 
-To create an autostart for Windows open the startup folder with keyboard `Windows + R`, enter `shell:startup` and create a shortcut here to `monitor.vbs`. 
+To create an autostart for Windows open start menu and search for `Task Scheduler`.
 
-This will run the script in the background on every boot.
+Select `Create Task`.
+
+Enter a name e.g. monitor.
+
+Add new trigger at login.
+
+Add a new action and select the `Windows/monitor.vbs` script.
+
+**Unselect** Stop task if it runs longer than 3 days.
+
+Select Okay.
+
+A new task will be created that runs the python monitoring script in the background every time a user starts the system and logs in.
 
 ## Author
 
