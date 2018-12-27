@@ -1,4 +1,4 @@
-import socket, time, json, datetime, platform, psutil, requests, pprint
+import socket, time, json, datetime, platform, psutil, requests, pprint, uuid
 
 def main():
     # Hostname Info
@@ -8,16 +8,14 @@ def main():
     # CPU Info
     cpu_count = psutil.cpu_count()
     cpu_usage = psutil.cpu_percent(interval=1)
-    print("CPU:")
-    print("Count:", cpu_count, "Usage:", cpu_usage)
+    print("CPU:\n\tCount:", cpu_count, "\n\tUsage:", cpu_usage)
 
     # Memory Info
     memory_stats = psutil.virtual_memory()
     memory_total = memory_stats.total
     memory_used = memory_stats.used
     memory_used_percent = memory_stats.percent
-    print("Memory:")
-    print("Percent:", memory_used_percent, "\tTotal:", memory_total / 1e+6, "MB", "\tUsed:", memory_used / 1e+6, "MB")
+    print("Memory:\n\tPercent:", memory_used_percent, "\n\tTotal:", memory_total / 1e+6, "MB", "\n\tUsed:", memory_used / 1e+6, "MB")
 
     # Disk Info
     disk_info = psutil.disk_partitions()
@@ -35,30 +33,31 @@ def main():
 
         disks.append(disk)
 
-        print("Disk name",disk["name"], "\tMount Point:", disk["mount_point"], "\tType",disk["type"], "\tSize:", disk["total_size"] / 1e+9,"\tUsage:", disk["used_size"] / 1e+9, "\tPercent Used:", disk["percent_used"])
+        print("\tDisk name",disk["name"], "\tMount Point:", disk["mount_point"], "\tType",disk["type"], "\tSize:", disk["total_size"] / 1e+9,"\tUsage:", disk["used_size"] / 1e+9, "\tPercent Used:", disk["percent_used"])
 
     # Network Info 
-    print("Network:")
     network_stats = get_bandwidth()
-    print("Traffic in:",network_stats["traffic_in"] / 1e+6,"\tTraffic out:",network_stats["traffic_out"] / 1e+6)
+    print("Network:\n\tTraffic in:",network_stats["traffic_in"] / 1e+6,"\n\tTraffic out:",network_stats["traffic_out"] / 1e+6)
 
     # Platform Info
-    print("OS:")
     system = {
         "name" : platform.system(),
         "version" : platform.release()
     }
-    print(system["name"],system["version"])
+    print("OS:\n\t",system["name"],system["version"])
 
     # Time Info
     timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     uptime = int(time.time() - psutil.boot_time())
-    print("System Uptime:")
-    print(uptime)
+    print("System Uptime:\n\t",uptime)
 
+    # System UUID
+    sys_uuid = uuid.getnode()
+	
     # Set Machine Info
     machine = {
     	"hostname" : hostname,
+		"uuid" : sys_uuid,
         "system" : system,
         "uptime" : uptime,
     	"cpu_count" : cpu_count,
