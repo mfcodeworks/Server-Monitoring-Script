@@ -47,7 +47,7 @@ def main():
     print("OS:\n\t",system["name"],system["version"])
 
     # Time Info
-    timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
     uptime = int(time.time() - psutil.boot_time())
     print("System Uptime:\n\t",uptime)
 
