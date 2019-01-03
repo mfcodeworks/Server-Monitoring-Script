@@ -8,6 +8,8 @@
 The Python script is designed to be run as a cronjob on every boot to run in the background.
 The script will gather information:
 
+- UUID (Unique for each system to avoid overlapping hostname for multi-network monitoring)
+- Hostname
 - CPU
 - Memory
 - Network
@@ -52,11 +54,12 @@ Example:
     ],
     "network_up": 54,
     "network_down": 4150,
-    "timestamp" : "2018-10-10 01:41:21"
+    "timestamp" : "2018-10-10T01:41:21+00:00",
+    "uuid" : 180331603484325
 }
 ```
 
-The script includes a function to send JSON to a remote server.
+The script includes a function to POST JSON to a remote server.
 
 This script can be installed on several machines that report to a central monitoring server.
 

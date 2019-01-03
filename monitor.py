@@ -108,8 +108,8 @@ def send_data(data):
         try:
             # endpoint = monitoring server
             endpoint = "http://monitor.localhost.local/api/"
-            response = requests.get(url = endpoint, params = {"data" : data})
-            print("\nGET:")
+            response = requests.post(url = endpoint, params = {"data" : data})
+            print("\nPOST:")
             print("Response:", response.status_code)
             print("Headers:")
             pprint.pprint(response.headers)
@@ -122,7 +122,7 @@ def send_data(data):
                 print("No JSON content")
             break
         except requests.exceptions.RequestException as e:
-            print("\nGET Error:\n",e)
+            print("\POST Error:\n",e)
             # Sleep 1 minute before retrying
             time.sleep(60)
     else:
