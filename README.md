@@ -12,7 +12,8 @@ The script will gather information:
 - Hostname
 - CPU
 - Memory
-- Network
+- Network Usage
+- Network Cards
 - Hard Drives
 - System OS
 - System Uptime
@@ -54,6 +55,22 @@ Example:
     ],
     "network_up": 54,
     "network_down": 4150,
+    "network_cards": [
+        {
+            "address": "127.0.0.1",
+            "address6": "::1",
+            "mac": "",
+            "name": "Loopback Pseudo-Interface 1",
+            "netmask": "255.0.0.0"
+        },
+        {
+            "address": "10.15.62.112",
+            "address6": "fe80::844d:a87:54ea:2100",
+            "mac": "1C-39-47-A6-4C-5E",
+            "name": "Ethernet",
+            "netmask": "255.255.0.0"
+        }
+    ],
     "timestamp" : "2018-10-10T01:41:21+00:00",
     "uuid" : 180331603484325
 }

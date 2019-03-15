@@ -22,23 +22,51 @@ def main():
     print("Disks:")
     disks = []
     for x in disk_info:
-        disk = {
-            "name" : x.device, 
-            "mount_point" : x.mountpoint, 
-            "type" : x.fstype, 
-            "total_size" : psutil.disk_usage(x.mountpoint).total, 
-            "used_size" : psutil.disk_usage(x.mountpoint).used, 
-            "percent_used" : psutil.disk_usage(x.mountpoint).percent
-        }
+        # Try fixes issues with connected 'disk' such as CD-ROMS, Phones, etc.
+        try:
+            disk = {
+                "name" : x.device, 
+                "mount_point" : x.mountpoint, 
+                "type" : x.fstype, 
+                "total_size" : psutil.disk_usage(x.mountpoint).total, 
+                "used_size" : psutil.disk_usage(x.mountpoint).used, 
+                "percent_used" : psutil.disk_usage(x.mountpoint).percent
+            }
 
-        disks.append(disk)
+            disks.append(disk)
 
-        print("\tDisk name",disk["name"], "\tMount Point:", disk["mount_point"], "\tType",disk["type"], "\tSize:", disk["total_size"] / 1e+9,"\tUsage:", disk["used_size"] / 1e+9, "\tPercent Used:", disk["percent_used"])
+            print("\tDisk name",disk["name"], "\tMount Point:", disk["mount_point"], "\tType",disk["type"], "\tSize:", disk["total_size"] / 1e+9,"\tUsage:", disk["used_size"] / 1e+9, "\tPercent Used:", disk["percent_used"])
+        except:
+            print("")
 
-    # Network Info 
+    # Bandwidth Info 
     network_stats = get_bandwidth()
     print("Network:\n\tTraffic in:",network_stats["traffic_in"] / 1e+6,"\n\tTraffic out:",network_stats["traffic_out"] / 1e+6)
 
+    # Network Info
+    nics = []
+    print("NICs:")
+    for name, snic_array in psutil.net_if_addrs().items():
+        # Create NIC object
+        nic = {
+            "name": name,
+            "mac": "",
+            "address": "",
+            "address6": "",
+            "netmask": ""
+        }
+        # Get NiC values
+        for snic in snic_array:
+            if snic.family == -1:
+                nic["mac"] = snic.address
+            elif snic.family == 2:
+                nic["address"] = snic.address
+                nic["netmask"] = snic.netmask
+            elif snic.family == 23:
+                nic["address6"] = snic.address
+        nics.append(nic)
+        print("\tNIC:",nic["name"], "\tMAC:", nic["mac"], "\tIPv4 Address:",nic["address"], "\tIPv4 Subnet:", nic["netmask"], "\tIPv6 Address:", nic["address6"])
+    
     # Platform Info
     system = {
         "name" : platform.system(),
@@ -68,6 +96,7 @@ def main():
     	"drives" : disks,
     	"network_up" : network_stats["traffic_out"],
     	"network_down" : network_stats["traffic_in"],
+        "network_cards": nics,
         "timestamp" : timestamp
     }
 
@@ -108,7 +137,7 @@ def send_data(data):
         try:
             # endpoint = monitoring server
             endpoint = "http://monitor.localhost.local/api/"
-            response = requests.post(url = endpoint, params = {"data" : data})
+            response = requests.post(url = endpoint, data = data)
             print("\nPOST:")
             print("Response:", response.status_code)
             print("Headers:")
@@ -122,7 +151,7 @@ def send_data(data):
                 print("No JSON content")
             break
         except requests.exceptions.RequestException as e:
-            print("\POST Error:\n",e)
+            print("\nPOST Error:\n",e)
             # Sleep 1 minute before retrying
             time.sleep(60)
     else:
