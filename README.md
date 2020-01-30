@@ -19,7 +19,7 @@ The script will gather information:
 - System Uptime
 - UTC Timestamp
 
-The script will produce a JSON output at 5 second intervals for use with any software or server accepting a JSON input.
+The script will produce a JSON output at intervals for use with any software or server accepting a JSON input.
 Example:
 
 ```json
@@ -79,6 +79,8 @@ Example:
 The script includes a function to POST JSON to a remote server.
 
 This script can be installed on several machines that report to a central monitoring server.
+
+The destination, checking interval, sending attempts after failure and timeout between resending attempts can be set through arguments, use `python3 monitor.py -h` for more.
 
 ## Usage
 
