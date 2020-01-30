@@ -1,4 +1,16 @@
-import socket, time, json, datetime, platform, psutil, requests, pprint, uuid
+import argparse, socket, time, json, datetime, platform, psutil, requests, pprint, uuid
+
+# parse args
+parser = argparse.ArgumentParser(description='Monitoring script to send system info to a tracking server')
+parser.add_argument('-d', '--dest', default='http://localhost:8080/', help='API Endpoint for Monitoring Data (Defaults to http://localhost:8080/)')
+parser.add_argument('-i', '--interval', default=5, type=int, help='Interval between checks (Seconds. Defaults to 5 seconds)')
+parser.add_argument('-a', '--attempts', default=30, type=int, help='Attempts to send data when sending failes (Defaults to 30)')
+parser.add_argument('-t', '--timeout', default=60, type=int, help='Timeout between resend attempts (Seconds. Defaults to 60. If attempts is reached script will die)')
+args = parser.parse_args()
+
+# Factor in sleep for bandwidth checking
+if args.interval >= 2:
+    args.interval -= 2
 
 def main():
     # Hostname Info
@@ -25,11 +37,11 @@ def main():
         # Try fixes issues with connected 'disk' such as CD-ROMS, Phones, etc.
         try:
             disk = {
-                "name" : x.device, 
-                "mount_point" : x.mountpoint, 
-                "type" : x.fstype, 
-                "total_size" : psutil.disk_usage(x.mountpoint).total, 
-                "used_size" : psutil.disk_usage(x.mountpoint).used, 
+                "name" : x.device,
+                "mount_point" : x.mountpoint,
+                "type" : x.fstype,
+                "total_size" : psutil.disk_usage(x.mountpoint).total,
+                "used_size" : psutil.disk_usage(x.mountpoint).used,
                 "percent_used" : psutil.disk_usage(x.mountpoint).percent
             }
 
@@ -39,7 +51,7 @@ def main():
         except:
             print("")
 
-    # Bandwidth Info 
+    # Bandwidth Info
     network_stats = get_bandwidth()
     print("Network:\n\tTraffic in:",network_stats["traffic_in"] / 1e+6,"\n\tTraffic out:",network_stats["traffic_out"] / 1e+6)
 
@@ -66,7 +78,7 @@ def main():
                 nic["address6"] = snic.address
         nics.append(nic)
         print("\tNIC:",nic["name"], "\tMAC:", nic["mac"], "\tIPv4 Address:",nic["address"], "\tIPv4 Subnet:", nic["netmask"], "\tIPv6 Address:", nic["address6"])
-    
+
     # Platform Info
     system = {
         "name" : platform.system(),
@@ -81,7 +93,7 @@ def main():
 
     # System UUID
     sys_uuid = uuid.getnode()
-	
+
     # Set Machine Info
     machine = {
     	"hostname" : hostname,
@@ -122,21 +134,21 @@ def get_bandwidth():
         current_in = 0
     else:
         current_in = net2_in - net1_in
-    
+
     if net1_out > net2_out:
         current_out = 0
     else:
         current_out = net2_out - net1_out
-    
+
     network = {"traffic_in" : current_in, "traffic_out" : current_out}
     return network
 
 def send_data(data):
     # Attempt to send data up to 30 times
-    for attempt in range(30):
+    for attempt in range(args.attempts):
         try:
             # endpoint = monitoring server
-            endpoint = "http://monitor.localhost.local/api/"
+            endpoint = args.dest
             response = requests.post(url = endpoint, data = data)
             print("\nPOST:")
             print("Response:", response.status_code)
@@ -153,12 +165,12 @@ def send_data(data):
         except requests.exceptions.RequestException as e:
             print("\nPOST Error:\n",e)
             # Sleep 1 minute before retrying
-            time.sleep(60)
+            time.sleep(args.timeout)
     else:
-        # If no connection established for half an hour, kill script
+        # If no connection established for attempts*timeout, kill script
         exit(0)
 
 while True:
     main()
     print("-----------------------------------------------------------------")
-    time.sleep(3)
+    time.sleep(args.interval)
